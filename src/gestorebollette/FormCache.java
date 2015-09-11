@@ -28,7 +28,8 @@ public class FormCache implements Serializable{     //(00)
         try{
             File cache = new File("formcache.bin");
             if (!cache.exists()) {
-                    cache.createNewFile();
+                /*logFile.getParentFile().mkdirs();*/
+                cache.createNewFile();
             }
                 
             FileOutputStream fout = new FileOutputStream(cache); //(04)

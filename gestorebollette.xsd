@@ -3,7 +3,7 @@
   <xs:element name="gestorebollette.LogXML">
     <xs:complexType>
       <xs:sequence>
-        <xs:element type="xs:string" name="IP"/>
+        <xs:element type="xs:string" name="ipClient"/>
         <xs:element type="xs:string" name="data"/>
         <xs:element type="xs:string" name="ora"/>
         <xs:element type="xs:string" name="evento"/>

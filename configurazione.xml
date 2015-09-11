@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <config>
 		<stileIntestazione>-fx-font-size: 30px; -fx-text-fill: #F63526; -fx-font-weight: bold; </stileIntestazione>
 		<stileLabel>-fx-font-size: 16px;</stileLabel>

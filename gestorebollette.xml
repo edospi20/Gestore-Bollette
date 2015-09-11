@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.178.32</ipClient>
+  <data>11-09-2015</data>
+  <ora>19:02:07</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+
+<gestorebollette.LogXML>
+  <ipClient>192.168.178.32</ipClient>
+  <data>11-09-2015</data>
+  <ora>19:02:39</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+
+<gestorebollette.LogXML>
+  <ipClient>192.168.178.32</ipClient>
+  <data>11-09-2015</data>
+  <ora>19:08:58</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+

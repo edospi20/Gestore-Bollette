@@ -249,7 +249,9 @@ public class GestoreBollette extends Application{       //(00)
         
         public void gestisciEventi(Stage stage){        
             confermaIns.setOnAction((ActionEvent event) -> {
-                String tipoIns = (String) tipoBolletta.getValue();      
+                LogXML inserimento = new LogXML("Inserimento Bolletta");
+                inserimento.invia(conf.IPServer, conf.porta);
+                String tipoIns = tipoBolletta.getValue().toString();      
                 String dataIns = campoData.getText();   
                 double importoIns = Double.parseDouble(campoImporto.getText());
                 double quota = importoIns / conf.utenti.length;
