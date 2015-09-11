@@ -31,6 +31,7 @@ public class ServerXML {
             try{
                 if(ValidazioneXML.valida(log)){
                     PrintWriter pw = new PrintWriter(new FileWriter(logFile, true));   //(03)     
+                    pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                     pw.println(log);
                     pw.println();
                     pw.close();

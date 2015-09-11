@@ -20,3 +20,10 @@
   <evento>Inserimento Bolletta</evento>
 </gestorebollette.LogXML>
 
+<gestorebollette.LogXML>
+  <ipClient>192.168.178.32</ipClient>
+  <data>11-09-2015</data>
+  <ora>19:15:57</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+
