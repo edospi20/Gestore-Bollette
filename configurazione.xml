@@ -1,0 +1,39 @@
+<config>
+		<stileIntestazione>-fx-font-size: 30px; -fx-text-fill: #F63526; -fx-font-weight: bold; </stileIntestazione>
+		<stileLabel>-fx-font-size: 16px;</stileLabel>
+		<stileLista>a</stileLista>
+		<stileTextfield>a</stileTextfield>
+		<stileBottone>a</stileBottone>
+		<bollette>
+			<bolletta colore = "#A09F9D">
+				<tipo>Gas</tipo>
+			</bolletta>
+			<bolletta colore = "#FFF380">
+				<tipo>Luce</tipo>
+			</bolletta>
+			<bolletta colore = "#82CAFA">
+				<tipo>Acqua</tipo>
+			</bolletta>
+			<bolletta colore = "#150517">
+				<tipo>Internet</tipo>
+			</bolletta>
+			<bolletta colore = "#C5908E">
+				<tipo>Rifiuti</tipo>
+			</bolletta>
+		</bollette>
+		<maxNumeroBollette>12</maxNumeroBollette>
+		<utenti>
+			<nome>Edoardo</nome>
+			<nome>Daniele</nome>
+			<nome>Giuseppe</nome>
+			<nome>Francesco</nome>
+		</utenti>
+		<xIntestazione>3</xIntestazione>
+		<yIntestazione>3</yIntestazione>
+		<larghezzaRiquadroBollette>150</larghezzaRiquadroBollette>
+		<altezzaRiquadroBollette>120</altezzaRiquadroBollette>
+		<larghezzaColonnaGriglia>100</larghezzaColonnaGriglia>
+                <altezzaRigaGriglia>50</altezzaRigaGriglia>
+		<IPServer>localhost</IPServer>
+		<porta>8080</porta>
+</config>

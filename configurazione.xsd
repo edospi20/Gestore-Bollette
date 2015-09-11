@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="gestorebollette.ConfigurazioneXML">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="stileIntestazione"/>
+        <xs:element type="xs:string" name="stileLabel"/>
+        <xs:element type="xs:string" name="stileLista"/>
+        <xs:element type="xs:string" name="stileTextfield"/>
+        <xs:element type="xs:string" name="stileBottone"/>
+        <xs:element name="bollette">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="bolletta" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="tipo"/>
+                    <xs:element type="xs:string" name="colore"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element type="xs:byte" name="maxNumeroBollette"/>
+        <xs:element name="utenti">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="nome" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element type="xs:string" name="xIntestazione"/>
+        <xs:element type="xs:string" name="yIntestazione"/>
+        <xs:element type="xs:string" name="larghezzaRiquadroBollette"/>
+        <xs:element type="xs:string" name="altezzaRiquadroBollette"/>
+        <xs:element type="xs:string" name="larghezzaTabella"/>
+        <xs:element type="xs:string" name="IPserver"/>
+        <xs:element type="xs:short" name="porta"/>
+        <xs:element type="xs:string" name="IPclient"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
