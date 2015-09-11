@@ -8,7 +8,9 @@ public class LogXML {
     private String evento;
     
     LogXML(String[] log){
-        ip = log[0];
-        data = 
+        ip = new ConfigurazioneXML()
+        data = log[1];
+        ora = log[2];
+        evento = 
     }
 }

@@ -4,6 +4,7 @@ package gestorebollette;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -16,12 +17,16 @@ public class ServerXML {
             Socket s = servs.accept();                          //(02)
             ObjectInputStream oin = new ObjectInputStream(s.getInputStream());
             String log = (String) oin.readObject();
-            System.out.println("Ricevuto:\n" + log + "\n");
+            System.out.println("Ricevuto: ");
+            System.out.println(log);
+            System.out.println();
             try{
-                ValidazioneXML.valida(log);
-                FileWriter fout = new FileWriter("gestorebollette.xml", true);      //(03)
-                fout.write(log + "\n");
-                fout.close();
+                if(ValidazioneXML.valida(log)){
+                    PrintWriter pw = new PrintWriter(new FileWriter("gestorebollette.xml", true));   //(03)     
+                    pw.println(log);
+                    pw.println();
+                    pw.close();
+                }
             }catch (IOException e) {
                 System.err.println("Errore nell' aperture del file: " + e.getMessage());                
             }
@@ -49,4 +54,5 @@ https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html
 (03):
 Il secondo parametro del costruttore indica che il file è incrementale.
 Ad ogni successiva scrittura nel file verrà appeso il contenuto della scrittura.
+Uso PrintWriter per stampare e andare a capo.
 */

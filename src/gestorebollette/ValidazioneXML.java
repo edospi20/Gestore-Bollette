@@ -13,20 +13,22 @@ import org.w3c.dom.Document;
 import org.xml.sax.*;
 
 public class ValidazioneXML {   //(00)
-    public static void valida(String x){
+    public static boolean valida(String x){
         try{
             DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();     //(01)
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);   //(02)
             Document d = db.parse(new InputSource(new ByteArrayInputStream(x.getBytes("utf-8"))));  //(03)
             Schema s = sf.newSchema(new StreamSource(new File("gestorebollette.xsd")));     //(04)
             s.newValidator().validate(new DOMSource(d));
+            return true;
         }catch (ParserConfigurationException e){
             e.printStackTrace();
         } catch (SAXException e) {
-            e.printStackTrace();
+            e.printStackTrace();          
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }
 
