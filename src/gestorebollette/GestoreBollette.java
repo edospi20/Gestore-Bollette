@@ -8,21 +8,11 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import com.thoughtworks.xstream.XStream;
 import java.io.File;
-import com.thoughtworks.xstream.converters.basic.*;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import static javafx.scene.control.ContentDisplay.RIGHT;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -59,17 +49,14 @@ public class GestoreBollette extends Application{       //(00)
         private GridPane grigliaPagamenti;
         private Button confermaSel;
         
-        private int[] indiciUtenti;
+        private Bolletta bollettaSelezionata;       
         
-        private Bolletta bollettaSelezionata;       //serve per la cache
-        
-        private class BollettaListaVisual extends ListCell<Bolletta>{
-            
+        private class BollettaListaVisual extends ListCell<Bolletta>{     
             @Override
-            protected void updateItem(Bolletta item, boolean empty) {       //(002)
+            protected void updateItem(Bolletta item, boolean empty) {       //(02)
                 super.updateItem(item, empty);
                 
-                setOnMouseClicked((MouseEvent e) -> {   //(003)
+                setOnMouseClicked((MouseEvent e) -> {   //(03)
                     bollettaSelezionata = item;
                     ResultSet res = DepositoDati.cercaPagamenti(item.id, conf.utenti);
                     
@@ -99,7 +86,7 @@ public class GestoreBollette extends Application{       //(00)
             }
         }
         
-        public void settaPagamenti(ResultSet res){      //(004)
+        public void settaPagamenti(ResultSet res){      //(04)
             int indiceRiga = 0;
             try{
                 do{
@@ -108,25 +95,25 @@ public class GestoreBollette extends Application{       //(00)
                        Label elem = (Label) grigliaPagamenti.getChildren().get(indiceRiga*3);
                        if(nomeUtente.equals(elem.getText())){
                             if(res.getInt("Pagata") == 1){
-                                ImageView a = new ImageView("tick.png");
-                                grigliaPagamenti.setConstraints(a, 1, indiceRiga);
-                                grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, a);
-                                GridPane.setHalignment(a, HPos.CENTER);
+                                ImageView pagata = new ImageView("tick.png");
+                                grigliaPagamenti.setConstraints(pagata, 1, indiceRiga);     //(05)
+                                grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, pagata);
+                                GridPane.setHalignment(pagata, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.PAGATA;
                             }else{
-                                ImageView b = new ImageView("cross.png");
-                                grigliaPagamenti.setConstraints(b, 1, indiceRiga);
-                                grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, b);
-                                GridPane.setHalignment(b, HPos.CENTER);
+                                ImageView nonPagata = new ImageView("cross.png");
+                                grigliaPagamenti.setConstraints(nonPagata, 1, indiceRiga);
+                                grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, nonPagata);
+                                GridPane.setHalignment(nonPagata, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.NON_PAGATA;
                             }
                             indiceRiga++;
                             break;
                        }else{
-                            ImageView c = new ImageView("square.png");
-                            grigliaPagamenti.setConstraints(c, 1, indiceRiga);
-                            grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, c);
-                            GridPane.setHalignment(c, HPos.CENTER);
+                            ImageView assente = new ImageView("square.png");
+                            grigliaPagamenti.setConstraints(assente, 1, indiceRiga);
+                            grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, assente);
+                            GridPane.setHalignment(assente, HPos.CENTER);
                             bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.ASSENTE;
                        }
                        indiceRiga++;
@@ -138,18 +125,18 @@ public class GestoreBollette extends Application{       //(00)
             }
         }
         
-        public void creaStrutture(){        //(02)
+        public void creaStrutture(){        //(06)
             intestazione = new Label("GESTORE BOLLETTE");
             
-            contenitoreBoxBollette = new HBox(20);  //(03)
+            contenitoreBoxBollette = new HBox(20);  //(07)
             
             for(BollettaConfig bconf : conf.bollette){
                 Label tipoBollette = new Label(bconf.tipo); 
                 tipoBollette.setPrefWidth(conf.larghezzaRiquadroBollette);
-                tipoBollette.setAlignment(Pos.CENTER);      //(04)
+                tipoBollette.setAlignment(Pos.CENTER);      //(08)
                 tipoBollette.setStyle("-fx-text-fill:" + bconf.colore + "; " + conf.stileLabel);
-                ResultSet res = DepositoDati.cercaBollette(bconf.tipo);
-                ObservableList<Bolletta> bollette = FXCollections.observableArrayList();
+                ResultSet res = DepositoDati.cercaBollette(bconf.tipo, conf.maxNumeroBollette);
+                ObservableList<Bolletta> bollette = FXCollections.observableArrayList();    
                 try{
                     while(res.next()){
                         bollette.add(new Bolletta(res.getInt("Id"), res.getString("Tipo"), res.getString("Data"), res.getDouble("Importo"), res.getInt("Pagata") == 1, conf.utenti.length));
@@ -158,12 +145,11 @@ public class GestoreBollette extends Application{       //(00)
                         e.printStackTrace();
                 }
                 bolletteTipo.put(bconf.tipo, bollette);
-                //To Do ObservableView con db 
-                ListView<Bolletta> listaBollette = new ListView<Bolletta>(bollette);    //(03)
+                ListView<Bolletta> listaBollette = new ListView<Bolletta>(bollette);    //(09)
                 Label placeholder = new Label("Nessuna bolletta presente");
                 placeholder.setStyle("-fx-text-fill: #F63526");
                 listaBollette.setPlaceholder(placeholder);
-                listaBollette.setCellFactory(new Callback<ListView<Bolletta>, ListCell<Bolletta>>(){    //(007)
+                listaBollette.setCellFactory(new Callback<ListView<Bolletta>, ListCell<Bolletta>>(){    //(10)
                     @Override
                     public ListCell<Bolletta> call(ListView<Bolletta> listaBollette){
                         return new BollettaListaVisual();
@@ -173,7 +159,7 @@ public class GestoreBollette extends Application{       //(00)
                 listaBollette.setPrefWidth(conf.larghezzaRiquadroBollette);
                 listaBollette.setPrefHeight(conf.altezzaRiquadroBollette);
                 listaBollette.setStyle("-fx-background-color:" + bconf.colore);
-                contenitoreBoxBollette.getChildren().add(new VBox(10, tipoBollette, listaBollette));  //(03)
+                contenitoreBoxBollette.getChildren().add(new VBox(10, tipoBollette, listaBollette));  
             }
             
             inserisci = new Label("INSERISCI NUOVA BOLLETTA");
@@ -181,11 +167,11 @@ public class GestoreBollette extends Application{       //(00)
             contenitoreDatiInserimento = new HBox(15);
             
             tipo = new Label("Tipo:");
-            ObservableList<String> tipiBollette = FXCollections.observableArrayList();  //(05)
+            ObservableList<String> tipiBollette = FXCollections.observableArrayList();  //(11)
             for(BollettaConfig bconf : conf.bollette){
                 tipiBollette.add(bconf.tipo);
             }
-            tipoBolletta = new ChoiceBox(tipiBollette);  //(05)
+            tipoBolletta = new ChoiceBox(tipiBollette);  //(11)
             data = new Label("Data:");
             campoData = new TextField();
             importo = new Label("Importo:");
@@ -201,34 +187,37 @@ public class GestoreBollette extends Application{       //(00)
 
             tipoSel = new Label("Tipo:");
             campoTipoSel = new TextField();
+            campoTipoSel.setEditable(false);
             dataSel = new Label("Data:");
             campoDataSel = new TextField();
+            campoDataSel.setEditable(false);
             importoSel = new Label("Importo:");
             campoImportoSel = new TextField();
+            campoImportoSel.setEditable(false);
             quotaSel = new Label("Quota:");
             campoQuotaSel = new TextField();
+            campoQuotaSel.setEditable(false);
 
             contenitoreDatiSelezione.getChildren().addAll(tipoSel, campoTipoSel, dataSel, campoDataSel, importoSel, campoImportoSel, quotaSel, campoQuotaSel);
             
-            grigliaPagamenti = new GridPane();      //(06)
+            grigliaPagamenti = new GridPane();      //(12)
             /*grigliaPagamenti.setGridLinesVisible(true);*/
             Arrays.sort(conf.utenti);
-            indiciUtenti = new int[conf.utenti.length];
             for(int i = 0; i < conf.utenti.length; i++){
                 Label utente = new Label(conf.utenti[i]);
-                GridPane.setHalignment(utente, HPos.CENTER);    //(07)
+                GridPane.setHalignment(utente, HPos.CENTER);    //(13)
                 ImageView pagato = new ImageView("square.png");
                 GridPane.setHalignment(pagato, HPos.CENTER);
                 Button paga = new Button("PAGA"); //aggiungere l'evento
                 GridPane.setHalignment(paga, HPos.CENTER);
-                grigliaPagamenti.setConstraints(utente, 0, i);  //(08)
+                grigliaPagamenti.setConstraints(utente, 0, i);  //(14)
                 grigliaPagamenti.setConstraints(pagato, 1, i);
                 grigliaPagamenti.setConstraints(paga, 2, i);
-                grigliaPagamenti.getRowConstraints().add(new RowConstraints(conf.altezzaRigaGriglia)); //(09)
+                grigliaPagamenti.getRowConstraints().add(new RowConstraints(conf.altezzaRigaGriglia)); //(15)
                 grigliaPagamenti.getChildren().addAll(utente, pagato, paga);
                 /*if(bollettaSelezionata.pagamentoUtenti[i] == Bolletta.StatoPagamento.ASSENTE){
                     paga.setDisable(true);
-                }else{
+                }else{      //(16)
                     paga.setOnAction((ActionEvent event) ->{
                         if(bollettaSelezionata.pagamentoUtenti[i] == Bolletta.StatoPagamento.PAGATA){
                             
@@ -248,9 +237,7 @@ public class GestoreBollette extends Application{       //(00)
         }
         
         public void gestisciEventi(Stage stage){        
-            confermaIns.setOnAction((ActionEvent event) -> {
-                LogXML inserimento = new LogXML("Inserimento Bolletta");
-                inserimento.invia(conf.IPServer, conf.porta);
+            confermaIns.setOnAction((ActionEvent event) -> {               
                 String tipoIns = tipoBolletta.getValue().toString();      
                 String dataIns = campoData.getText();   
                 double importoIns = Double.parseDouble(campoImporto.getText());
@@ -260,17 +247,21 @@ public class GestoreBollette extends Application{       //(00)
                 if(idBollettaIns >= 0){
                     bolletteTipo.get(tipoIns).add(bollettaIns);
                 }
+                LogXML inserimento = new LogXML("Inserimento Bolletta");
+                inserimento.invia(conf.IPServer, conf.porta);       //(17)
             }); 
             
             confermaSel.setOnAction((ActionEvent event) ->{
-                DepositoDati.modificaPagamenti(bollettaSelezionata.id, bollettaSelezionata, conf.utenti);
-                //cambiare con tic nella ListView se tutti hanno pagato
+                boolean pagataDaTutti = DepositoDati.modificaPagamenti(bollettaSelezionata.id, bollettaSelezionata, conf.utenti);
+                //cambiare con tic nella ListView se tutti hanno pagato              
+                LogXML modifica = new LogXML("Modifica Bolletta");
+                modifica.invia(conf.IPServer, conf.porta);
             });
             
             stage.setOnCloseRequest((WindowEvent event) -> chiudi());
         }
         
-        public void settaStile(){       //(10)
+        public void settaStile(){       //(18)
          
             intestazione.setStyle(conf.stileIntestazione);
             intestazione.setPrefWidth(LARGHEZZA_FINESTRA);
@@ -290,16 +281,14 @@ public class GestoreBollette extends Application{       //(00)
             contenitoreDatiInserimento.setAlignment(Pos.CENTER);
             contenitoreDatiInserimento.setLayoutY(inserisci.getLayoutY());
             
-            //tipo.setStyle(conf.stileLabel);
-            tipoBolletta.setPrefWidth(80);
-            //data.setStyle(conf.stileLabel);
-            campoData.setPrefWidth(80);
-            //importo.setStyle(conf.stileLabel);
-            campoImporto.setPrefWidth(80);
+            tipoBolletta.setStyle(conf.stileTextfield);
+            campoData.setStyle(conf.stileTextfield);
+            campoImporto.setStyle(conf.stileTextfield);
             
             confermaIns.setPrefHeight(24);
-            confermaIns.setLayoutX(LARGHEZZA_FINESTRA/2 - confermaIns.getWidth()/2);
+            confermaIns.setLayoutX(LARGHEZZA_FINESTRA/2 - confermaIns.getWidth()/2 - 3);
             confermaIns.setLayoutY(contenitoreDatiInserimento.getLayoutY() + contenitoreDatiInserimento.getPrefHeight() + 90);
+            confermaIns.setStyle(conf.stileBottone);
             
             seleziona.setStyle(conf.stileLabel + "-fx-text-fill: #F63526;");
             seleziona.setPrefWidth(LARGHEZZA_FINESTRA);
@@ -311,27 +300,25 @@ public class GestoreBollette extends Application{       //(00)
             contenitoreDatiSelezione.setAlignment(Pos.CENTER);
             contenitoreDatiSelezione.setLayoutY(seleziona.getLayoutY());
             
-            //tipoSel.setStyle(conf.stileLabel);
-            campoTipoSel.setPrefWidth(80);
-            //dataSel.setStyle(conf.stileLabel);
-            campoDataSel.setPrefWidth(80);
-            //importoSel.setStyle(conf.stileLabel);
-            campoImportoSel.setPrefWidth(80);
-            //quotaSel.setStyle(conf.stileLabel);
-            campoQuotaSel.setPrefWidth(80);
+           
+            campoTipoSel.setStyle(conf.stileTextfield);           
+            campoDataSel.setStyle(conf.stileTextfield);            
+            campoImportoSel.setStyle(conf.stileTextfield);
+            campoQuotaSel.setStyle(conf.stileTextfield);
             
             grigliaPagamenti.setPrefWidth(LARGHEZZA_FINESTRA);
             grigliaPagamenti.setAlignment(Pos.CENTER);
             grigliaPagamenti.setLayoutY(contenitoreDatiSelezione.getLayoutY() + contenitoreDatiSelezione.getHeight() + 60);
             
             confermaSel.setPrefHeight(24);
-            confermaSel.setLayoutX(LARGHEZZA_FINESTRA/2 - confermaSel.getWidth()/2);
+            confermaSel.setLayoutX(LARGHEZZA_FINESTRA/2 - confermaSel.getWidth()/2 - 3);
             confermaSel.setLayoutY(grigliaPagamenti.getLayoutY() + (conf.utenti.length * conf.altezzaRigaGriglia) + 20);
+            confermaSel.setStyle(conf.stileBottone);
         }
         
-        public void ripristinaConCache(List<String> datiCache){
+        public void ripristinaConCache(List<String> datiCache){     //(19)
             if(!datiCache.isEmpty()){
-                tipoBolletta.setValue(datiCache.get(0));        //potrebbe dare errore con stringa vuota 
+                tipoBolletta.setValue(datiCache.get(0));        
                 campoData.setText(datiCache.get(1));
                 campoImporto.setText(datiCache.get(2));
                 if(datiCache.size() > 3){
@@ -340,7 +327,7 @@ public class GestoreBollette extends Application{       //(00)
                     campoImportoSel.setText(datiCache.get(6));
                     campoQuotaSel.setText(datiCache.get(7));
                     bollettaSelezionata = new Bolletta(Integer.parseInt(datiCache.get(3)), datiCache.get(4), datiCache.get(5), Double.parseDouble(datiCache.get(6)), (Integer.parseInt(datiCache.get(8)) == 1), conf.utenti.length);
-                    for(int i = 9; i < conf.utenti.length + 9; i++){
+                    for(int i = 9; i < conf.utenti.length + 9; i++){        //(20)
                         int j = i - 9;
                         switch(datiCache.get(i)){
                             case "PAGATA":                               
@@ -370,7 +357,7 @@ public class GestoreBollette extends Application{       //(00)
             }
         }
         
-        public void chiudi(){
+        public void chiudi(){       //(21)
             List<String> datiCache = new ArrayList<String>();
             if(tipoBolletta.getValue() != null)
                 datiCache.add(tipoBolletta.getValue().toString());
@@ -392,26 +379,29 @@ public class GestoreBollette extends Application{       //(00)
             
             FormCache salvataggio = new FormCache(datiCache);
             salvataggio.salvaCache();
+            
+            LogXML chiusura = new LogXML("Chiusura applicazione");
+            chiusura.invia(conf.IPServer, conf.porta);
         }
 	
         
         @Override
-	public void start(Stage stage){
+	public void start(Stage stage){     //(22)
             conf = new ConfigurazioneXML();
             
-            XStream xs = new XStream();     //(11)
-            xs.alias("config", ConfigurazioneXML.class);    //(12)
+            XStream xs = new XStream();     //(23)
+            xs.alias("config", ConfigurazioneXML.class);    //(24)
             xs.alias("bolletta", BollettaConfig.class);
-            xs.useAttributeFor(BollettaConfig.class, "colore");     //(13)
+            xs.useAttributeFor(BollettaConfig.class, "colore");     //(25)
             xs.alias("nome", String.class);
             
-            conf = (ConfigurazioneXML) xs.fromXML(new File("configurazione.xml"));      //(14)
+            conf = (ConfigurazioneXML) xs.fromXML(new File("configurazione.xml"));      //(26)
             
-            bolletteTipo = new HashMap<String, ObservableList<Bolletta>>(conf.bollette.length);
+            bolletteTipo = new HashMap<String, ObservableList<Bolletta>>(conf.bollette.length);     //(27)
             
             creaStrutture();
                      
-            //(15)
+            //(28)
             Group root;
             root = new Group(intestazione, contenitoreBoxBollette, inserisci ,contenitoreDatiInserimento, confermaIns, seleziona, contenitoreDatiSelezione, grigliaPagamenti, confermaSel);
             Scene scene = new Scene(root, LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA); 
@@ -429,6 +419,9 @@ public class GestoreBollette extends Application{       //(00)
             
             datiCache = caricamento.getCampi();
             ripristinaConCache(datiCache);
+            
+            LogXML avvio = new LogXML("Avvio applicazione");
+            avvio.invia(conf.IPServer, conf.porta);
 	}
 }
 
@@ -437,23 +430,27 @@ public class GestoreBollette extends Application{       //(00)
 Componenti grafici dell'interfaccia.
 https://docs.oracle.com/javafx/2/ui_controls/jfxpub-ui_controls.htm
 
-(002):
+(02):
 UpdateItem viene richiamato ogni volta che cambia il contenuto di una cella
 
-(003):
+(03):
 Al click su una cella della ListView ricavo i dati della bolletta corrispondente 
 e li stampo nei rispettivi campi della sezione bolletta selezionata.
 https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseEvent.html
 
-(004):
+(04):
 Il metodo settaPagamenti visualizza nella griglia i corretti pagamenti associati
 agli utenti e inizializza il campo pagamentoUtenti della Bolletta bollettaSelezionata.
 
-(02):
+(05):
+Il metodo setConstraints serve per settare i vincoli di layout di una cella 
+della GridPane.
+
+(06):
 Il metodo creaStrutture() crea tutti gli oggetti che saranno presenti 
 nell' interfaccia grafica.
 
-(03):
+(07):
 Costruttore di oggetto HBox il cui argomento indica lo spacing che intercorre
 tra gli elementi contenuti nell'HBox.
 In seguito aggiungerò all'oggetto HBox tutti gli oggetti VBox che a loro volta conterrano 
@@ -463,69 +460,102 @@ https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/HBox.html
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/VBox.html
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/ListView.html
 
-(007):
-Il metodo setCellFactory serve per settare una nuova formattazione
-della cella da usare nella ListView.
 
-(04):
+
+(08):
 Il metodo setAlignment(Pos.CENTER) consente all'oggetto cui è applicato 
 di posizionarsi al centro rispetto allo spazio occupato dall'oggetto stesso nella
 visualizzazione.
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Labeled.html#setAlignment-javafx.geometry.Pos-
 
-(05):
+(09):
+ListView
+
+(10):
+Il metodo setCellFactory serve per settare una nuova formattazione
+della cella da usare nella ListView.
+
+(11):
 Modificando l' ObservableList<> modifico le possibili scelte che 
 appariranno nella ChoiceBox.
 https://docs.oracle.com/javase/8/javafx/api/javafx/collections/ObservableList.html
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/ChoiceBox.html
 
-(06):
+
+(12):
 L'oggetto GridPane consente di formattare una porzione dell'interfaccia grafica 
 sotto forma di griglia.
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html
 
-(07):
+(13):
 Il metodo setHalignment(utente, HPos.CENTER) consente di posizionare l'oggetto
 passato come primo argomento centrato orizzontalmente all'intero di una cella
 della GridPane.
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html#setHalignment-javafx.scene.Node-javafx.geometry.HPos-
 
-(08):
-Il metodo setConstraints(utente, j, i) consente di settare il contenuto 
+(14):
+Il metodo setConstraints(utente, j, i) consente di settare i vincoli di layout 
 della cella di colonna j e riga i con l'oggetto utente quando utente sarà
 aggiunto nella GridPane.
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html#setConstraints-javafx.scene.Node-int-int-
 
-(09):
+(15):
 I metodi getRowConstraints() e getColumnConstraints() 
 mi consentono di settare l'altezza di una riga della cella e l'ampiezza di una 
 colonna.
 
+(16):
+paga
 
-(10):
+(17):
+Il metodo invia, serve per inviare al server la riga di log, che verrà poi inserita 
+da quest' ultimo nel file incrementale gestorebollette.xml
+
+(18):
 Il metodo settaStile() consente di settare lo stile dei vari oggetti istanziati 
 dal metodo creaStrutture().
 https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html
 
-(11):
+(19):
+Il metodo ripristinaConCache() serve per visualizzare nell'interfaccia grafica 
+i dati presenti antecedentemente all'ultima chiusura dell'applicazione.
+
+(20):
+Inizio il ciclo dall'indice i = 9 poiché sono 9 i dati presenti in datiCache prima 
+di trovare gli stati di pagamento che verranno scorsi e catturati con una get(i).
+
+(21):
+Il metodo chiudi() serve per inserire i dati necessari nella cache alla 
+chiusura dell'applicazione.
+
+(22):
+Il metodo start() viene chiamato dopo il metodo init che inizializza la app.
+
+
+
+(23):
 XStream è un flusso in cui possono viaggiare oggetti XML e che offre metodi 
 per la serializzazione e la deserializzazione.
 https://x-stream.github.io/javadoc/index.html
 
-(12):
+(24):
 Il metodo alias("config", ConfigurazioneXML.class) genera un alias per la seconda 
 classe passata come argomento; facendo si che l'elemento <ConfigurazioneXML> per 
 esempio venga visto come <config>.
 
-(13):
+(25):
 Il metodo useAttributeFor(BollettaConfig.class, "colore") fa si che il campo
 colore presente nella classe BollettaConfig venga visto come un attributo.
 
-(14):
+(26):
 Il metodo fromXML(new File("configurazione.xml")) deserializza il file da XML a
 Java.
 
-(15):
+(27):
+HashMap è una sorta di array associativo in Java.
+https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+
+(28):
 Aggiungo gli elementi all'interfaccia tramite l'uso del Group(contenitore di oggetti osservabili)
 della Scene (contenitore principale della finestra) e dello Stage(finestra vera e propria).
 https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Group.html

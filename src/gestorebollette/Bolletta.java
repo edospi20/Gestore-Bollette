@@ -12,7 +12,7 @@ public class Bolletta {     //(00)
     
     enum StatoPagamento{PAGATA, NON_PAGATA, ASSENTE}
     
-    public Bolletta(int id, String tipo, String data, double importo, double quota, boolean pagata, StatoPagamento[] pagamento){
+    public Bolletta(int id, String tipo, String data, double importo, double quota, boolean pagata, StatoPagamento[] pagamento){    //(01)
         this.id = id;
         this.tipo = tipo;
         this.data = data;
@@ -30,12 +30,9 @@ public class Bolletta {     //(00)
         this.pagataDaTutti = pagata;
         pagamentoUtenti = new StatoPagamento[numUtenti];
     }
-    
-    public void setPagamenti(boolean[] pagamenti){
-    }
-    
-    public String toCell(){     //(04)
-        return data + "  " + importo + "€  ";
+ 
+    public String toCell(){     //(03)
+        return data + "  " + importo + "€ ";
     }
 }
 
@@ -44,10 +41,13 @@ public class Bolletta {     //(00)
 La classe Bolletta viene utilizzata per creare un modello per i dati di 
 ciascuna bolletta.
 
+(01):
+Costruttore che inizializza anche lo StatoPagamento dei singoli utenti.
+
 (02):
 Costruttore utilizzato alla creazione delle bollette inserite nelle ListView<Bolletta>. 
 
-(04):
+(03):
 Il metodo toCell ritorna la stringa con i dati della bolletta da inserire 
 nelle celle delle ListView.
 

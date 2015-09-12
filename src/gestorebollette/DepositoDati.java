@@ -22,12 +22,13 @@ public class DepositoDati {     //(00)
             }
     }
      
-    static ResultSet cercaBollette(String tipo){    //(03)
+    static ResultSet cercaBollette(String tipo, int limit){    //(03)
         ResultSet res = null;
         getConnection();
         try{
-            PreparedStatement psta = con.prepareStatement("SELECT Id, Tipo, Data, Importo, IF(sum(Pagata) = count(*), 1, 0) as Pagata FROM Bolletta b join Pagamento p on b.Id = p.IdBolletta WHERE Tipo = ? GROUP BY b.Id");  //(04)
+            PreparedStatement psta = con.prepareStatement("SELECT Id, Tipo, Data, Importo, IF(sum(Pagata) = count(*), 1, 0) as Pagata FROM Bolletta b join Pagamento p on b.Id = p.IdBolletta WHERE Tipo = ? GROUP BY b.Id LIMIT ?");  //(04)
             psta.setString(1, tipo);
+            psta.setInt(2, limit);
             res = psta.executeQuery();   //(05)    
         }catch (SQLException e) {
                    System.err.println("Errore nella ricerca di dati dal DB: " + e.getMessage());
@@ -87,7 +88,7 @@ public class DepositoDati {     //(00)
         return idBolletta;
     }
     
-    static int saltaAssenti(int index, Bolletta.StatoPagamento[] statoPagamenti, String[] utenti){
+    static int saltaAssenti(int index, Bolletta.StatoPagamento[] statoPagamenti, String[] utenti){      //(09)
         for(int i = index; index < utenti.length; index++){
             if(statoPagamenti[i] != Bolletta.StatoPagamento.ASSENTE){
                 return index;
@@ -96,7 +97,7 @@ public class DepositoDati {     //(00)
         return -1;
     }
     
-    static int modificaPagamenti(int id, Bolletta bollettaSelezionata, String[] utenti){
+    static boolean modificaPagamenti(int id, Bolletta bollettaSelezionata, String[] utenti){        //(10)
         getConnection();
         try{
             PreparedStatement psta;
@@ -114,8 +115,8 @@ public class DepositoDati {     //(00)
         }catch (SQLException e) {
                   System.err.println("Errore nella modifica di dati del DB: " + e.getMessage());
                   e.printStackTrace();
-                }     
-        return 1;
+                }
+        return (bollettaSelezionata.pagataDaTutti) ? true : false;
     }
 }
 
@@ -164,5 +165,15 @@ Per eseguirlo è necessaria una connessione, che viene fornita dal driver.
 L'esecuzione di uno Statement può produrre come risultato un ResultSet, che 
 contiene le tuple identificate dall' esecuzione dello statement sul DB.
 https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html
+
+(09):
+Il metodo saltaAssenti(int index, Bolletta.StatoPagamento[] statoPagamenti, String[] utenti)
+ritorna il primo indice dell'array statoPagamenti il cui StatoPagamento è diverso
+da ASSENTE.
+
+(10):
+Il metodo modificaPagamenti serve per modificare gli stati di pagamento nel DB 
+relativi agli utenti presenti nel file di configurazione in quel momento e 
+il cui stato di pagamento è diverso da ASSENTE.
 
 */

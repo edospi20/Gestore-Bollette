@@ -4,14 +4,11 @@ public class ConfigurazioneXML { //(00)
     
     public String stileIntestazione;
     public String stileLabel;
-    public String stileLista;
     public String stileTextfield;
     public String stileBottone;
     public BollettaConfig[] bollette;
     public int maxNumeroBollette;
     public String[] utenti;
-    public double xIntestazione;
-    public double yIntestazione;
     public double larghezzaRiquadroBollette;
     public double altezzaRiquadroBollette;
     public double larghezzaColonnaGriglia;

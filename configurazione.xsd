@@ -5,7 +5,6 @@
       <xs:sequence>
         <xs:element type="xs:string" name="stileIntestazione"/>
         <xs:element type="xs:string" name="stileLabel"/>
-        <xs:element type="xs:string" name="stileLista"/>
         <xs:element type="xs:string" name="stileTextfield"/>
         <xs:element type="xs:string" name="stileBottone"/>
         <xs:element name="bollette">
@@ -30,8 +29,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element type="xs:string" name="xIntestazione"/>
-        <xs:element type="xs:string" name="yIntestazione"/>
         <xs:element type="xs:string" name="larghezzaRiquadroBollette"/>
         <xs:element type="xs:string" name="altezzaRiquadroBollette"/>
         <xs:element type="xs:string" name="larghezzaTabella"/>

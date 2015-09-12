@@ -2,8 +2,6 @@
 package gestorebollette;
 
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.dom.DOMSource;
@@ -33,6 +31,10 @@ public class ValidazioneXML {   //(00)
 }
 
 /*
+(00):
+La classe ValidazioneXML fornisce il metodo valida() per la validazione di 
+stringhe xml.
+
 (01):
 DocumentBuilder definisce l' API per ottenere un'instanza del documento DOM dal documento XML
 https://docs.oracle.com/javase/8/docs/api/javax/xml/parsers/DocumentBuilder.html
