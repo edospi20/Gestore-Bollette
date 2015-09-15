@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 import static javafx.scene.control.ContentDisplay.RIGHT;
 import javafx.scene.image.ImageView;
@@ -49,15 +51,45 @@ public class GestoreBollette extends Application{       //(00)
         private GridPane grigliaPagamenti;
         private Button confermaSel;
         
-        private Bolletta bollettaSelezionata;       
+        private Bolletta bollettaSelezionata; 
+        
+        private class HandlerPagamento implements EventHandler<ActionEvent>{
+            private int indiceUtente;
+            
+            public HandlerPagamento(int iUtente){
+                indiceUtente = iUtente;
+            }
+            
+            @Override
+            public void handle(ActionEvent event){
+                if(bollettaSelezionata.pagamentoUtenti[indiceUtente] == Bolletta.StatoPagamento.PAGATA){
+                    ImageView nonPagata = new ImageView("cross.png");
+                    grigliaPagamenti.setConstraints(nonPagata, 1, indiceUtente);
+                    grigliaPagamenti.getChildren().set(indiceUtente*3 + 1, nonPagata);
+                    GridPane.setHalignment(nonPagata, HPos.CENTER);
+                    bollettaSelezionata.pagamentoUtenti[indiceUtente] = Bolletta.StatoPagamento.NON_PAGATA;
+                }else{
+                    ImageView pagata = new ImageView("tick.png");
+                    grigliaPagamenti.setConstraints(pagata, 1, indiceUtente);     
+                    grigliaPagamenti.getChildren().set(indiceUtente*3 + 1, pagata);
+                    GridPane.setHalignment(pagata, HPos.CENTER);
+                    bollettaSelezionata.pagamentoUtenti[indiceUtente] = Bolletta.StatoPagamento.PAGATA;
+                }
+            }
+        }
         
         private class BollettaListaVisual extends ListCell<Bolletta>{     
             @Override
             protected void updateItem(Bolletta item, boolean empty) {       //(02)
                 super.updateItem(item, empty);
                 
-                setOnMouseClicked((MouseEvent e) -> {   //(03)
+                setOnMouseClicked((MouseEvent e) -> {   //(03)                  
                     bollettaSelezionata = item;
+                    if(item == null){       //(03)
+                        svuotaCampi("selezione");
+                        return;
+                    }
+                    confermaSel.setDisable(false);
                     ResultSet res = DepositoDati.cercaPagamenti(item.id, conf.utenti);
                     
                     campoTipoSel.setText(item.tipo);
@@ -99,13 +131,15 @@ public class GestoreBollette extends Application{       //(00)
                                 grigliaPagamenti.setConstraints(pagata, 1, indiceRiga);     //(05)
                                 grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, pagata);
                                 GridPane.setHalignment(pagata, HPos.CENTER);
-                                bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.PAGATA;
+                                bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.PAGATA;                         
+                                grigliaPagamenti.getChildren().get(indiceRiga*3 + 2).setDisable(false);
                             }else{
                                 ImageView nonPagata = new ImageView("cross.png");
                                 grigliaPagamenti.setConstraints(nonPagata, 1, indiceRiga);
                                 grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, nonPagata);
                                 GridPane.setHalignment(nonPagata, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.NON_PAGATA;
+                                grigliaPagamenti.getChildren().get(indiceRiga*3 + 2).setDisable(false);
                             }
                             indiceRiga++;
                             break;
@@ -115,6 +149,7 @@ public class GestoreBollette extends Application{       //(00)
                             grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, assente);
                             GridPane.setHalignment(assente, HPos.CENTER);
                             bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.ASSENTE;
+                            grigliaPagamenti.getChildren().get(indiceRiga*3 + 2).setDisable(true);
                        }
                        indiceRiga++;
                    }
@@ -209,24 +244,18 @@ public class GestoreBollette extends Application{       //(00)
                 ImageView pagato = new ImageView("square.png");
                 GridPane.setHalignment(pagato, HPos.CENTER);
                 Button paga = new Button("PAGA"); //aggiungere l'evento
+                /*paga.setStyle(conf.stileBottone);*/
                 GridPane.setHalignment(paga, HPos.CENTER);
                 grigliaPagamenti.setConstraints(utente, 0, i);  //(14)
                 grigliaPagamenti.setConstraints(pagato, 1, i);
                 grigliaPagamenti.setConstraints(paga, 2, i);
                 grigliaPagamenti.getRowConstraints().add(new RowConstraints(conf.altezzaRigaGriglia)); //(15)
                 grigliaPagamenti.getChildren().addAll(utente, pagato, paga);
-                /*if(bollettaSelezionata.pagamentoUtenti[i] == Bolletta.StatoPagamento.ASSENTE){
-                    paga.setDisable(true);
-                }else{      //(16)
-                    paga.setOnAction((ActionEvent event) ->{
-                        if(bollettaSelezionata.pagamentoUtenti[i] == Bolletta.StatoPagamento.PAGATA){
-                            
-                        }else{
-                            
-                        }
-
-                    });
-                }*/
+                
+                if(bollettaSelezionata == null)
+                    paga.setDisable(true);    
+                    
+                paga.setOnAction(new HandlerPagamento(i));   //(16)
             }
             
             grigliaPagamenti.getColumnConstraints().add(new ColumnConstraints(conf.larghezzaColonnaGriglia));
@@ -234,6 +263,30 @@ public class GestoreBollette extends Application{       //(00)
             grigliaPagamenti.getColumnConstraints().add(new ColumnConstraints(conf.larghezzaColonnaGriglia));  
             
             confermaSel = new Button("CONFERMA");
+            confermaSel.setDisable(true);
+        }
+        
+        public void svuotaCampi(String sezione){
+            if(sezione == "inserimento"){
+                tipoBolletta.getSelectionModel().clearSelection();
+                campoData.setText("");
+                campoImporto.setText("");
+            }
+            else{
+                bollettaSelezionata = null;
+                campoTipoSel.setText("");         
+                campoDataSel.setText("");        
+                campoImportoSel.setText("");
+                campoQuotaSel.setText("");
+                for(int i = 0; i < conf.utenti.length; i++){
+                    ImageView assente = new ImageView("square.png");
+                    grigliaPagamenti.setConstraints(assente, 1, i);
+                    grigliaPagamenti.getChildren().set(i*3 + 1, assente);
+                    GridPane.setHalignment(assente, HPos.CENTER);
+                    grigliaPagamenti.getChildren().get(i*3 + 2).setDisable(true);                          
+                }
+                confermaSel.setDisable(true);
+            }
         }
         
         public void gestisciEventi(Stage stage){        
@@ -247,13 +300,14 @@ public class GestoreBollette extends Application{       //(00)
                 if(idBollettaIns >= 0){
                     bolletteTipo.get(tipoIns).add(bollettaIns);
                 }
+                svuotaCampi("inserimento");
                 LogXML inserimento = new LogXML("Inserimento Bolletta");
                 inserimento.invia(conf.IPServer, conf.porta);       //(17)
             }); 
             
             confermaSel.setOnAction((ActionEvent event) ->{
                 boolean pagataDaTutti = DepositoDati.modificaPagamenti(bollettaSelezionata.id, bollettaSelezionata, conf.utenti);
-                //cambiare con tic nella ListView se tutti hanno pagato              
+                svuotaCampi("selezione");         
                 LogXML modifica = new LogXML("Modifica Bolletta");
                 modifica.invia(conf.IPServer, conf.porta);
             });
@@ -308,11 +362,17 @@ public class GestoreBollette extends Application{       //(00)
             
             grigliaPagamenti.setPrefWidth(LARGHEZZA_FINESTRA);
             grigliaPagamenti.setAlignment(Pos.CENTER);
-            grigliaPagamenti.setLayoutY(contenitoreDatiSelezione.getLayoutY() + contenitoreDatiSelezione.getHeight() + 60);
+            if(conf.utenti.length <= 4)
+                grigliaPagamenti.setLayoutY(contenitoreDatiSelezione.getLayoutY() + contenitoreDatiSelezione.getHeight() + 60);
+            else
+                grigliaPagamenti.setLayoutY(contenitoreDatiSelezione.getLayoutY() + contenitoreDatiSelezione.getHeight() + 40);
             
             confermaSel.setPrefHeight(24);
             confermaSel.setLayoutX(LARGHEZZA_FINESTRA/2 - confermaSel.getWidth()/2 - 3);
-            confermaSel.setLayoutY(grigliaPagamenti.getLayoutY() + (conf.utenti.length * conf.altezzaRigaGriglia) + 20);
+            if(conf.utenti.length <= 4)
+                confermaSel.setLayoutY(grigliaPagamenti.getLayoutY() + (conf.utenti.length * conf.altezzaRigaGriglia) + 20);
+            else
+                confermaSel.setLayoutY(grigliaPagamenti.getLayoutY() + (conf.utenti.length * conf.altezzaRigaGriglia));
             confermaSel.setStyle(conf.stileBottone);
         }
         
@@ -321,14 +381,29 @@ public class GestoreBollette extends Application{       //(00)
                 tipoBolletta.setValue(datiCache.get(0));        
                 campoData.setText(datiCache.get(1));
                 campoImporto.setText(datiCache.get(2));
+                //confronto i nomi nella cache con i nomi nel file di configurazione
+                //e se sono diversi non riempo. mi serve un indice che mi dice quanti erano 
                 if(datiCache.size() > 3){
+                    
+                    int numeroVecchiUtenti = Integer.parseInt(datiCache.get(9));
+                    if(numeroVecchiUtenti != conf.utenti.length)
+                        return;
+                    for(int i = 10; i < conf.utenti.length + 10; i++){
+                        System.out.println(datiCache.get(i) + " " + conf.utenti[i - 10]);
+                        if(!datiCache.get(i).equals(conf.utenti[i - 10]))
+                            return;
+                    }
+                    
+                    System.out.println("fuori");
+                    confermaSel.setDisable(false);
                     campoTipoSel.setText(datiCache.get(4));
                     campoDataSel.setText(datiCache.get(5));
                     campoImportoSel.setText(datiCache.get(6));
                     campoQuotaSel.setText(datiCache.get(7));
-                    bollettaSelezionata = new Bolletta(Integer.parseInt(datiCache.get(3)), datiCache.get(4), datiCache.get(5), Double.parseDouble(datiCache.get(6)), (Integer.parseInt(datiCache.get(8)) == 1), conf.utenti.length);
-                    for(int i = 9; i < conf.utenti.length + 9; i++){        //(20)
-                        int j = i - 9;
+                    bollettaSelezionata = new Bolletta(Integer.parseInt(datiCache.get(3)), datiCache.get(4), datiCache.get(5), Double.parseDouble(datiCache.get(6)), (Integer.parseInt(datiCache.get(8)) == 1), conf.utenti.length);                                    
+                    
+                    for(int i = 10 + conf.utenti.length; i < 10 + conf.utenti.length*2; i++){        //(20)
+                        int j = i - (10 + conf.utenti.length);
                         switch(datiCache.get(i)){
                             case "PAGATA":                               
                                 ImageView pagata = new ImageView("tick.png");
@@ -336,6 +411,7 @@ public class GestoreBollette extends Application{       //(00)
                                 grigliaPagamenti.getChildren().set(j*3 + 1, pagata);
                                 GridPane.setHalignment(pagata, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[j] = Bolletta.StatoPagamento.PAGATA;
+                                grigliaPagamenti.getChildren().get(j*3 + 2).setDisable(false);
                                 break;
                             case "NON_PAGATA":                               
                                 ImageView nonPagata = new ImageView("cross.png");
@@ -343,6 +419,7 @@ public class GestoreBollette extends Application{       //(00)
                                 grigliaPagamenti.getChildren().set(j*3 + 1, nonPagata);
                                 GridPane.setHalignment(nonPagata, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[j] = Bolletta.StatoPagamento.NON_PAGATA;
+                                grigliaPagamenti.getChildren().get(j*3 + 2).setDisable(false);
                                 break;
                             case "ASSENTE":                               
                                 ImageView assente = new ImageView("square.png");
@@ -350,6 +427,7 @@ public class GestoreBollette extends Application{       //(00)
                                 grigliaPagamenti.getChildren().set(j*3 + 1, assente);
                                 GridPane.setHalignment(assente, HPos.CENTER);
                                 bollettaSelezionata.pagamentoUtenti[j] = Bolletta.StatoPagamento.ASSENTE;
+                                grigliaPagamenti.getChildren().get(j*3 + 2).setDisable(true);
                                 break;
                         }                       
                     }
@@ -372,7 +450,11 @@ public class GestoreBollette extends Application{       //(00)
                 datiCache.add(campoImportoSel.getText().toString());
                 datiCache.add(campoQuotaSel.getText().toString());
                 datiCache.add(Integer.toString((bollettaSelezionata.pagataDaTutti) ? 1 : 0));
+                datiCache.add(Integer.toString(conf.utenti.length));
+                for(int i = 0; i < conf.utenti.length; i++)
+                    datiCache.add(conf.utenti[i]);
                 for(int i = 0; i < conf.utenti.length; i++){
+                    System.out.println(bollettaSelezionata.pagamentoUtenti[i].toString());
                     datiCache.add(bollettaSelezionata.pagamentoUtenti[i].toString());
                 }
             }
@@ -436,6 +518,7 @@ UpdateItem viene richiamato ogni volta che cambia il contenuto di una cella
 (03):
 Al click su una cella della ListView ricavo i dati della bolletta corrispondente 
 e li stampo nei rispettivi campi della sezione bolletta selezionata.
+Evito che il metodo prosegua al click di una lista vuota.
 https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseEvent.html
 
 (04):

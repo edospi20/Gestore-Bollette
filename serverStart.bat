@@ -1,0 +1,1 @@
+C:\prg\jdk8\bin\java -cp "build\classes;" gestorebollette.ServerXML 8080
