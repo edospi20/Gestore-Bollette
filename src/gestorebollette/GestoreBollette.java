@@ -155,6 +155,14 @@ public class GestoreBollette extends Application{       //(00)
                        indiceRiga++;
                    }
                 }while(res.next());
+                for(; indiceRiga < conf.utenti.length; indiceRiga++){
+                    ImageView assente = new ImageView("square.png");
+                    grigliaPagamenti.setConstraints(assente, 1, indiceRiga);
+                    grigliaPagamenti.getChildren().set(indiceRiga*3 + 1, assente);
+                    GridPane.setHalignment(assente, HPos.CENTER);
+                    bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.ASSENTE;
+                    grigliaPagamenti.getChildren().get(indiceRiga*3 + 2).setDisable(true);
+                }
             }catch(SQLException ex){
                 System.err.println("Errore nel get del nomeUtente : " + ex.getMessage());
                 ex.printStackTrace();

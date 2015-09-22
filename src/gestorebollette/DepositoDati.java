@@ -105,12 +105,14 @@ public class DepositoDati {     //(00)
             for(int i = 0; i < utenti.length; i++){
                 psta = con.prepareStatement("UPDATE Pagamento SET Pagata = ? WHERE IdBolletta = ? AND NomeUtente = ?");
                 int indicePagamentoNonAssente = saltaAssenti(j, bollettaSelezionata.pagamentoUtenti, utenti);
-                int pagata = (bollettaSelezionata.pagamentoUtenti[indicePagamentoNonAssente] == Bolletta.StatoPagamento.PAGATA) ? 1 : 0;
+                if(!(indicePagamentoNonAssente < 0)){
+                    int pagata = (bollettaSelezionata.pagamentoUtenti[indicePagamentoNonAssente] == Bolletta.StatoPagamento.PAGATA) ? 1 : 0;
+                    psta.setInt(1, pagata);
+                    psta.setInt(2, id);
+                    psta.setString(3, utenti[indicePagamentoNonAssente]);
+                    psta.executeUpdate(); 
+                }
                 j = indicePagamentoNonAssente + 1; 
-                psta.setInt(1, pagata);
-                psta.setInt(2, id);
-                psta.setString(3, utenti[indicePagamentoNonAssente]);
-                psta.executeUpdate(); 
             }
         }catch (SQLException e) {
                   System.err.println("Errore nella modifica di dati del DB: " + e.getMessage());
