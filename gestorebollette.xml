@@ -830,3 +830,267 @@
   <evento>Inserimento Bolletta</evento>
 </gestorebollette.LogXML>
 
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.103</ipClient>
+  <data>15-09-2015</data>
+  <ora>16:44:44</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:52:21</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:52:37</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:52:39</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:52:42</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:52:52</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:14</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:17</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:26</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:30</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:33</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:41</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:45</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:48</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:56</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:53:58</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:54:01</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:55:50</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:56:39</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:57:35</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:57:43</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:57:48</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:57:51</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:58:47</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:58:51</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>09:59:23</ora>
+  <evento>Inserimento Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>10:00:14</ora>
+  <evento>Chiusura applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.104</ipClient>
+  <data>16-09-2015</data>
+  <ora>10:00:22</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.108</ipClient>
+  <data>19-09-2015</data>
+  <ora>18:26:29</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.108</ipClient>
+  <data>19-09-2015</data>
+  <ora>18:44:45</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.108</ipClient>
+  <data>19-09-2015</data>
+  <ora>18:54:14</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.108</ipClient>
+  <data>19-09-2015</data>
+  <ora>18:54:22</ora>
+  <evento>Modifica Bolletta</evento>
+</gestorebollette.LogXML>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<gestorebollette.LogXML>
+  <ipClient>192.168.0.108</ipClient>
+  <data>19-09-2015</data>
+  <ora>18:59:59</ora>
+  <evento>Avvio applicazione</evento>
+</gestorebollette.LogXML>
+

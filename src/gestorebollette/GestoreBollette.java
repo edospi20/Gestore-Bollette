@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import static javafx.scene.control.ContentDisplay.RIGHT;
@@ -120,6 +119,8 @@ public class GestoreBollette extends Application{       //(00)
         
         public void settaPagamenti(ResultSet res){      //(04)
             int indiceRiga = 0;
+            //ToDo rimuovere errore se ultimo utente con pagamento assenti in chiusura dell'app.
+            //bollettaSelezionata.pagamentoUtenti[indiceRiga] = Bolletta.StatoPagamento.ASSENTE non inizializzata.
             try{
                 do{
                    String nomeUtente = res.getString("NomeUtente");
@@ -381,20 +382,16 @@ public class GestoreBollette extends Application{       //(00)
                 tipoBolletta.setValue(datiCache.get(0));        
                 campoData.setText(datiCache.get(1));
                 campoImporto.setText(datiCache.get(2));
-                //confronto i nomi nella cache con i nomi nel file di configurazione
-                //e se sono diversi non riempo. mi serve un indice che mi dice quanti erano 
                 if(datiCache.size() > 3){
                     
                     int numeroVecchiUtenti = Integer.parseInt(datiCache.get(9));
                     if(numeroVecchiUtenti != conf.utenti.length)
                         return;
                     for(int i = 10; i < conf.utenti.length + 10; i++){
-                        System.out.println(datiCache.get(i) + " " + conf.utenti[i - 10]);
                         if(!datiCache.get(i).equals(conf.utenti[i - 10]))
                             return;
                     }
                     
-                    System.out.println("fuori");
                     confermaSel.setDisable(false);
                     campoTipoSel.setText(datiCache.get(4));
                     campoDataSel.setText(datiCache.get(5));
