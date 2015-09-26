@@ -307,7 +307,10 @@ public class GestoreBollette extends Application{       //(00)
                 int idBollettaIns = DepositoDati.inserisciBolletta(tipoIns, dataIns, importoIns, quota, conf.utenti);
                 Bolletta bollettaIns = new Bolletta(idBollettaIns, tipoIns, dataIns, importoIns, false, conf.utenti.length);
                 if(idBollettaIns >= 0){
-                    bolletteTipo.get(tipoIns).add(bollettaIns);
+                    if(bolletteTipo.get(tipoIns).size() == conf.maxNumeroBollette){
+                        bolletteTipo.get(tipoIns).remove(0);
+                    }
+                    bolletteTipo.get(tipoIns).add(bollettaIns); 
                 }
                 svuotaCampi("inserimento");
                 LogXML inserimento = new LogXML("Inserimento Bolletta");

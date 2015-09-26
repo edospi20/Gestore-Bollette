@@ -26,7 +26,7 @@ public class DepositoDati {     //(00)
         ResultSet res = null;
         getConnection();
         try{
-            PreparedStatement psta = con.prepareStatement("SELECT Id, Tipo, Data, Importo, IF(sum(Pagata) = count(*), 1, 0) as Pagata FROM Bolletta b join Pagamento p on b.Id = p.IdBolletta WHERE Tipo = ? GROUP BY b.Id LIMIT ?");  //(04)
+            PreparedStatement psta = con.prepareStatement("SELECT Id, Tipo, Data, Importo, IF(sum(Pagata) = count(*), 1, 0) as Pagata FROM Bolletta b join Pagamento p on b.Id = p.IdBolletta WHERE Tipo = ? GROUP BY b.Id ORDER BY b.Id DESC LIMIT ?");  //(04)
             psta.setString(1, tipo);
             psta.setInt(2, limit);
             res = psta.executeQuery();   //(05)    
