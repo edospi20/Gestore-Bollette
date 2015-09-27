@@ -18,11 +18,9 @@ public class FormCache implements Serializable{     //(00)
     void salvaCache(){  //(02)
         try{
             File cache = new File("formcache.bin");
-            if (!cache.exists()) {
-                /*logFile.getParentFile().mkdirs();*/
+            if (!cache.exists()) 
                 cache.createNewFile();
-            }
-                
+      
             FileOutputStream fout = new FileOutputStream(cache); //(04)
             ObjectOutputStream oout = new ObjectOutputStream(fout);
             oout.writeObject(this.campi);

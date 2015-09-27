@@ -10,10 +10,8 @@ public class ServerXML {        //(00)
         try{
        
         File logFile = new File("gestorebollette.xml");
-        if (!logFile.exists()) {
-            /*logFile.getParentFile().mkdirs();*/
+        if (!logFile.exists())
             logFile.createNewFile();
-        }
         
         ServerSocket servs = new ServerSocket(Integer.parseInt(args[0]));      //(01)
         while(true){           

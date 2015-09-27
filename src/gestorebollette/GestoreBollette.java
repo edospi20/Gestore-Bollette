@@ -253,7 +253,6 @@ public class GestoreBollette extends Application{       //(00)
                 ImageView pagato = new ImageView("square.png");
                 GridPane.setHalignment(pagato, HPos.CENTER);
                 Button paga = new Button("PAGA"); //aggiungere l'evento
-                /*paga.setStyle(conf.stileBottone);*/
                 GridPane.setHalignment(paga, HPos.CENTER);
                 grigliaPagamenti.setConstraints(utente, 0, i);  //(14)
                 grigliaPagamenti.setConstraints(pagato, 1, i);
@@ -461,10 +460,8 @@ public class GestoreBollette extends Application{       //(00)
                 datiCache.add(Integer.toString(conf.utenti.length));
                 for(int i = 0; i < conf.utenti.length; i++)
                     datiCache.add(conf.utenti[i]);
-                for(int i = 0; i < conf.utenti.length; i++){
-                    System.out.println(bollettaSelezionata.pagamentoUtenti[i].toString());
+                for(int i = 0; i < conf.utenti.length; i++)
                     datiCache.add(bollettaSelezionata.pagamentoUtenti[i].toString());
-                }
             }
             
             FormCache salvataggio = new FormCache(datiCache);
