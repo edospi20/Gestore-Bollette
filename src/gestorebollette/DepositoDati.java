@@ -15,7 +15,7 @@ public class DepositoDati {     //(00)
     
     private static void getConnection(){
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/archiviobollette", "root", ""); //(02)
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/archiviobollette", "root", ""); //(02) 
             }catch (SQLException e) {
                 System.err.println("Errore di connessione al DB: " + e.getMessage());
                 e.printStackTrace();
@@ -134,7 +134,7 @@ DataBase e di eseguire statement SQL.
 https://docs.oracle.com/javase/8/docs/api/java/sql/Connection.html
 
 (02):
-Il metoo getConnection("jdbc:mysql://localhost:3306/GestoreBollette", "root", "")
+Il metodo getConnection("jdbc:mysql://localhost:3306/GestoreBollette", "root", "")
 della classe DriverManager ritorna un oggetto Connection ed ha come argomenti 
 l'Url del DB, l'username e la password.
 https://docs.oracle.com/javase/8/docs/api/java/sql/DriverManager.html
